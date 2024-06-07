@@ -1,4 +1,5 @@
-import { ITmdb, tmdbSchemaFormat } from '@fethcat/shared/types'
+import { IMovie, ITmdb, tmdbSchemaFormat } from '@fethcat/shared/types'
+import { IFilterOption } from './types.ts'
 
 export function convertToHours(value: number, separator = ':', trail = '') {
   const date: Date = new Date()
@@ -14,13 +15,15 @@ export function formatTmdb(tmdb: ITmdb): ITmdb {
   return formattedTmdb
 }
 
-export function getYear(date: string | null) {
-  if (!date) return ''
-  return date.slice(0, 4)
+export function formatOptions(movie: IMovie): IFilterOption {
+  return {
+    name: `${movie.senscritique.title} ${formatDate(movie.senscritique.dateRelease)}`,
+    id: movie.id,
+  }
 }
 
-export function formatOption(date: string | null) {
-  const year = getYear(date)
+function formatDate(date: string | null) {
+  const year = date?.slice(0, 4) || ''
   return year && `(${year})`
 }
 

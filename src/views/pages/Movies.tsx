@@ -15,11 +15,12 @@ import { Movie } from './Movie.js'
 
 type IMoviesProps = {
   filters: IFilters
-  selectedMovies: IMovie[]
-  setSelectedMovies: Dispatch<SetStateAction<IMovie[]>>
+  setFilters: Dispatch<SetStateAction<IFilters>>
+  moviesSelected: IMovie[]
+  setMoviesSelected: Dispatch<SetStateAction<IMovie[]>>
 }
 
-export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMoviesProps): JSX.Element => {
+export const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }: IMoviesProps): JSX.Element => {
   const { ref, inView } = useInView()
   const { showSnackBar } = useSnackBar()
 
@@ -79,7 +80,7 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
   }, [randomizedMovie])
 
   const select = (value: IMovie) => {
-    let newSelection = [...selectedMovies]
+    let newSelection = [...moviesSelected]
     const index = newSelection.findIndex((movie) => movie.id === value.id)
     if (index !== -1) {
       newSelection.splice(index, 1)
@@ -88,11 +89,11 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
       newSelection.push(value)
       showSnackBar(`${value.senscritique.title} ajouté`, 'success', 3000)
     }
-    setSelectedMovies(newSelection)
+    setMoviesSelected(newSelection)
   }
 
   const onRandomSelection = () => {
-    const movie = selectedMovies[Math.floor(Math.random() * selectedMovies.length)]
+    const movie = moviesSelected[Math.floor(Math.random() * moviesSelected.length)]
     setDetailMovie(movie)
     setDetailOpen(true)
   }
@@ -105,7 +106,7 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
 
   return (
     <>
-      {selectedMovies.length !== 0 && (
+      {moviesSelected.length !== 0 && (
         <div className="catalog-selection">
           <div className="catalog-list__header">
             <h1>Sélection</h1>
@@ -114,7 +115,7 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
             </Button>
           </div>
           <div className="movie-list">
-            {selectedMovies.map((movie: IMovie) => (
+            {moviesSelected.map((movie: IMovie) => (
               <Movie
                 key={movie.id}
                 movie={movie}
@@ -140,7 +141,7 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
             movies={movies}
             openDialog={openDialog}
             select={select}
-            selection={selectedMovies}
+            selection={moviesSelected}
             status={status}
             error={error}
           ></Container>
@@ -156,6 +157,8 @@ export const Movies = memo(({ filters, selectedMovies, setSelectedMovies }: IMov
         loading={detailLoading}
         refreshList={refreshList}
         setOpen={setDetailOpen}
+        filters={filters}
+        setFilters={setFilters}
       ></Detail>
     </>
   )

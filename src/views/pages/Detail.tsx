@@ -17,10 +17,10 @@ import { common, green } from '@mui/material/colors'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { Dispatch, FormEvent, SetStateAction, memo, useEffect, useRef, useState } from 'react'
-import { z } from 'zod'
-import { staleTime } from '../../constants.js'
+import { defaultFilters, staleTime } from '../../constants.js'
+import { useSnackBar } from '../../contexts/SnackbarContext.js'
 import { getMovie, getTMDB, updateMovie } from '../../services/movies.js'
-import { mongoIdSchema } from '../../types.js'
+import { IFilterOption, IFilters, isFilterOption, isFilterOptions } from '../../types.js'
 import { convertToHours, formatPosterSC } from '../../utils.js'
 import { AccordionForm } from '../components/AccordionForm.js'
 import { CardFooter } from '../components/CardFooter.js'
@@ -35,14 +35,35 @@ type IDetailProps = {
   initMovie: Omit<IMovie, 'opsDatas'>
   refreshList: () => void
   setOpen: Dispatch<SetStateAction<boolean>>
+  filters: IFilters
+  setFilters: Dispatch<SetStateAction<IFilters>>
 }
 
 interface SearchForm extends HTMLFormElement {
   searchInput: HTMLInputElement
 }
 
-function openTab(target: string) {
-  window.open(`https://www.senscritique.com/film/${target}`, '_blank', 'noreferrer')
+const formatSCUrl = (target: string) => {
+  return `https://www.senscritique.com/film/${target}`
+}
+
+const ratingUrls: Record<string, string> = {
+  rottenTomatoes: 'https://www.rottentomatoes.com/search?search=',
+  tmdb: 'https://www.themoviedb.org/movie/',
+  imdb: 'https://www.imdb.com/title/',
+  metacritic: 'https://www.metacritic.com/search/',
+}
+
+const resolveUrl = (key: string, tmdb?: ITmdb): string => {
+  const baseUrl = ratingUrls[key] || 'https://www.google.com/search?q='
+  let url = baseUrl + tmdb?.title
+  if (key === 'imdb') url = baseUrl + tmdb?.imdbId
+  if (key === 'tmdb') url = baseUrl + tmdb?.tmdbId
+  return url
+}
+
+function openTab(url: string) {
+  window.open(url, '_blank', 'noreferrer')
 }
 
 function getBookmark(movie: Omit<IMovie, 'opsDatas'>, tmdb: ITmdb) {
@@ -55,10 +76,10 @@ function getActorImage(url: string) {
   return url
 }
 
-export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: IDetailProps) => {
+export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, setFilters }: IDetailProps) => {
   const [tmdbSearch, setTMDBSearch] = useState<string>('')
   const loadingRef = useRef<HTMLDivElement>(null)
-  // const { showSnackBar } = useSnackBar()
+  const { showSnackBar } = useSnackBar()
 
   const { data: movie, refetch: refreshMovie } = useQuery({
     initialData: initMovie,
@@ -72,6 +93,19 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
     queryFn: () => getTMDB(tmdbSearch),
     staleTime,
   })
+
+  const selectOption = (
+    property: 'directors' | 'actors' | 'polls' | 'genres' | 'countries',
+    value: IFilterOption | string,
+  ) => {
+    const newSelection = [...filters[property]]
+    if (isFilterOption(value) && isFilterOptions(newSelection)) {
+      if (!newSelection.find(({ id }) => id === value.id)) newSelection.push(value)
+    } else newSelection.push(value)
+    const newFilters = { ...defaultFilters, [property]: newSelection }
+    setFilters(newFilters)
+    handleClose()
+  }
 
   const handleClose = () => {
     setOpen(false)
@@ -109,7 +143,7 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
   return (
     <Dialog fullWidth={true} maxWidth={'lg'} className="dialog" open={open} onClose={handleClose} scroll="paper">
       <>
-        <DialogTitle className="dialog__title" onClick={() => openTab(`${movie.senscritique.slug}/${movie.id}`)}>
+        <DialogTitle className="dialog__title">
           <span>{movie.senscritique.title}</span>
           <span style={{ fontWeight: 100, fontStyle: 'italic' }}>{movie.senscritique.originalTitle}</span>
         </DialogTitle>
@@ -122,25 +156,30 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
               <div>
                 <div>{movie.senscritique.synopsis}</div>
                 <h4>Réalisateurs</h4>
-                {movie.senscritique.directors.map((director) => (
+                {movie.senscritique.directors.map(({ id, name }) => (
                   <Chip
-                    key={director.id}
+                    key={id}
                     className="chip"
-                    label={director.name}
-                    onClick={() => console.log('Clicked')}
+                    label={name}
+                    onClick={() => selectOption('directors', { id, name })}
                   ></Chip>
                 ))}
               </div>
               <div>
                 <h4>Genres</h4>
                 {movie.senscritique.genresInfos.map((genre) => (
-                  <Chip key={genre} className="chip" label={genre} onClick={() => console.log('Clicked')}></Chip>
+                  <Chip key={genre} className="chip" label={genre} onClick={() => selectOption('genres', genre)}></Chip>
                 ))}
               </div>
               <div>
                 <h4>Pays</h4>
                 {movie.senscritique.countries.map((country) => (
-                  <Chip key={country} className="chip" label={country} onClick={() => console.log('Clicked')}></Chip>
+                  <Chip
+                    key={country}
+                    className="chip"
+                    label={country}
+                    onClick={() => selectOption('countries', country)}
+                  ></Chip>
                 ))}
               </div>
               <div className="divers">
@@ -148,12 +187,12 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
                   {movie.senscritique.duration ? convertToHours(movie.senscritique.duration, ' h ', ' min') : ''}
                 </span>
                 <span>{dayjs(movie.senscritique.dateRelease).format('MMMM YYYY')}</span>
-                <span className="rating">
+                <span className="rating" onClick={() => openTab(formatSCUrl(`${movie.senscritique.slug}/${movie.id}`))}>
                   <img className="logo" src="/assets/senscritique.svg"></img> {movie.senscritique.rating}
                 </span>
                 {movie.tmdb &&
                   Object.entries(movie.tmdb.ratings).map(([key, rating]) => (
-                    <span key={key} className="rating">
+                    <span key={key} className="rating" onClick={() => openTab(resolveUrl(key, movie.tmdb))}>
                       <img className="logo" src={`/assets/${key}.svg`}></img> {rating.value}
                     </span>
                   ))}
@@ -168,26 +207,30 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
                   <div className="image-wrapper">
                     <img src={getActorImage(actor.picture)}></img>
                   </div>
-                  <a
-                    href={`https://www.senscritique.com/contact/actor/${actor.id}`}
-                    target="_blank"
-                    style={{ textDecoration: 'none', fontWeight: 'bolder', color: 'initial' }}
+                  <span
+                    onClick={() => selectOption('actors', { id: actor.id, name: actor.name })}
+                    className="detail__actors-item__name"
                   >
                     {actor.name}
-                  </a>
+                  </span>
                   <span>{role}</span>
                 </div>
               ))}
             </div>
           </div>
           <div>
-            {movie.senscritique.polls?.length && (
+            {movie.senscritique.polls?.length > 0 && (
               <>
                 <h3>Tops</h3>
                 <div style={{ display: 'block' }}>
                   <EmblaCarousel
                     Slide={CardWide}
-                    slides={movie.senscritique.polls || []}
+                    slides={
+                      movie.senscritique.polls.map((poll) => ({
+                        ...poll,
+                        onClick: () => selectOption('polls', { id: poll.id, name: poll.name }),
+                      })) || []
+                    }
                     options={{ dragFree: true, containScroll: 'trimSnaps' }}
                   />
                 </div>
@@ -237,7 +280,7 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen }: 
               <DataTable
                 movie={movie}
                 pageSize={movie.providers.length}
-                rows={z.array(mongoIdSchema).parse(movie.providers)}
+                rows={movie.providers}
                 handleUpdate={refreshMovie}
               ></DataTable>
             </AccordionDetails>

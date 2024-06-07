@@ -1,8 +1,17 @@
 import { z } from 'zod'
 
-export const mongoIdSchema = z.object({ _id: z.string() }).passthrough()
-export const optionSchema = mongoIdSchema.merge(z.object({ name: z.string() })).passthrough()
-export type IFilterOptions = z.infer<typeof optionSchema>
+export const optionSchema = z.object({ id: z.number(), name: z.string() })
+export type IFilterOption = z.infer<typeof optionSchema>
+
+export const isFilterOption = (value: unknown): value is IFilterOption => {
+  const { success } = optionSchema.safeParse(value)
+  return success
+}
+
+export const isFilterOptions = (value: unknown): value is IFilterOption[] => {
+  const { success } = z.array(optionSchema).safeParse(value)
+  return success
+}
 
 export const filterSchema = z.object({
   categories: z.array(z.string()),
@@ -25,9 +34,9 @@ export type IFilters = z.infer<typeof filterSchema>
 
 export const filterFormatter = filterSchema.merge(
   z.object({
-    directors: z.array(optionSchema.transform((director) => director._id)),
-    actors: z.array(optionSchema.transform((actor) => actor._id)),
-    polls: z.array(optionSchema.transform((poll) => poll._id)),
+    directors: z.array(optionSchema.transform((director) => director.id)),
+    actors: z.array(optionSchema.transform((actor) => actor.id)),
+    polls: z.array(optionSchema.transform((poll) => poll.id)),
   }),
 )
 

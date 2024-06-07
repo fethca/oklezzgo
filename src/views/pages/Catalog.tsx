@@ -13,11 +13,16 @@ export const Catalog = memo((): JSX.Element => {
     <div className="catalog">
       <Filters
         filters={filters}
-        onFiltersChange={setFilters}
+        setFilters={setFilters}
         moviesSelected={moviesSelected}
         setMoviesSelected={setMoviesSelected}
       ></Filters>
-      <Movies filters={filters} selectedMovies={moviesSelected} setSelectedMovies={setMoviesSelected}></Movies>
+      <Movies
+        filters={filters}
+        setFilters={setFilters}
+        moviesSelected={moviesSelected}
+        setMoviesSelected={setMoviesSelected}
+      ></Movies>
     </div>
   )
 })

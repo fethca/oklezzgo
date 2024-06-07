@@ -227,10 +227,6 @@ svg .cls-4 {
   width: fit-content;
 }
 
-.dialog__title:hover {
-  cursor: pointer;
-}
-
 .dialog h3 {
   border-bottom: solid;
   padding: 30px 0px 10px 0;
@@ -256,6 +252,14 @@ svg .cls-4 {
 .detail__actors-item {
   display: flex;
   flex-direction: column;
+}
+
+.detail__actors-item__name {
+  font-weight: bolder;
+}
+
+.detail__actors-item__name:hover {
+  cursor: pointer;
 }
 
 .image-wrapper {

@@ -19,8 +19,6 @@ export function SessionProvider({ children }: PropsWithChildren): JSX.Element {
     staleTime,
   })
 
-  console.log('Session = ', session)
-
   if (isPending)
     return (
       <Container style={{ height: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

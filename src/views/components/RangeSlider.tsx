@@ -1,6 +1,6 @@
 import { Cancel } from '@mui/icons-material'
 import { Box, IconButton, Input, Slider, Typography } from '@mui/material'
-import { ChangeEvent, Dispatch, SetStateAction, memo, useCallback } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, memo, useCallback, useState } from 'react'
 import { IFilters } from '../../types.js'
 
 interface IRangeSliderProps {
@@ -10,11 +10,10 @@ interface IRangeSliderProps {
   max: number
   step: number
   filters: IFilters
-  onFiltersChange: Dispatch<SetStateAction<IFilters>>
+  setFilters: Dispatch<SetStateAction<IFilters>>
   convertLabel?: boolean
   convertLabelFn?: (value: number) => string | number
-  values: number[]
-  setValues: Dispatch<SetStateAction<number[]>>
+  filterValues: number[]
 }
 
 export const RangeSlider = memo(
@@ -25,32 +24,36 @@ export const RangeSlider = memo(
     max,
     step,
     filters,
-    onFiltersChange,
+    setFilters,
     convertLabel = false,
     convertLabelFn = (value: number) => value,
-    values,
-    setValues,
+    filterValues,
   }: IRangeSliderProps): JSX.Element => {
+    const [values, setValues] = useState<number[]>(filterValues)
+
     const onChange = useCallback((_event: Event, newValue: number | number[]) => {
       setValues(newValue as number[])
     }, [])
 
-    const onCommitted = useCallback(() => {
-      const newFilters = { ...filters }
-      newFilters[name] = values
-      onFiltersChange(newFilters)
-    }, [values])
-
     const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
       let newValues = [...values]
       const newValue = event.target.value === '' ? min : Number(event.target.value)
-      if (event.target.id === 'min') newValues[0] = newValue
-      if (event.target.id === 'max') newValues[1] = newValue
+      if (event.target.id.startsWith('min')) newValues[0] = newValue
+      if (event.target.id.startsWith('max')) newValues[1] = newValue
       setValues(newValues)
     }
 
+    const onCommitted = useCallback(() => {
+      const newFilters = { ...filters }
+      newFilters[name] = values
+      setFilters(newFilters)
+    }, [values])
+
     const onClear = () => {
       setValues([min, max])
+      const newFilters = { ...filters }
+      newFilters[name] = [min, max]
+      setFilters(newFilters)
     }
 
     return (

@@ -1,7 +1,7 @@
 import { IMovie, ITmdb } from '@fethcat/shared/types'
 import axios from 'axios'
 import { apiUrl, defaultFilters } from '../constants.js'
-import { IFilterOptions, IFilters, IFormattedFilters, filterFormatter } from '../types.js'
+import { IFilterOption, IFilters, IFormattedFilters, filterFormatter } from '../types.js'
 
 const comparisonKeys = ['rating', 'dateRelease', 'duration', 'popularity', 'seed']
 type IFormattedEntries = [keyof IFormattedFilters, IFormattedFilters[keyof IFormattedFilters]][]
@@ -51,21 +51,21 @@ export async function getTMDB(search: string): Promise<ITmdb[]> {
   return tmdb
 }
 
-export async function getDirectors({ pageSize } = { pageSize: 300 }): Promise<IFilterOptions[]> {
+export async function getDirectors({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
   let url = `${apiUrl}/directors?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { directors } = data
   return directors
 }
 
-export async function getActors({ pageSize } = { pageSize: 300 }): Promise<IFilterOptions[]> {
+export async function getActors({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
   let url = `${apiUrl}/actors?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { actors } = data
   return actors
 }
 
-export async function getPolls({ pageSize } = { pageSize: 300 }): Promise<IFilterOptions[]> {
+export async function getPolls({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
   let url = `${apiUrl}/polls?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { polls } = data
@@ -101,7 +101,7 @@ export async function getMovieList(search: string): Promise<IMovie[]> {
   return list
 }
 
-export async function searchDirectors(search: string): Promise<IFilterOptions[]> {
+export async function searchDirectors(search: string): Promise<IFilterOption[]> {
   if (!search) return []
   let url = `${apiUrl}/directors/search?search=${search}`
   const { data } = await axios.get(url)
@@ -109,7 +109,7 @@ export async function searchDirectors(search: string): Promise<IFilterOptions[]>
   return list
 }
 
-export async function searchActors(search: string): Promise<IFilterOptions[]> {
+export async function searchActors(search: string): Promise<IFilterOption[]> {
   if (!search) return []
   let url = `${apiUrl}/actors/search?search=${search}`
   const { data } = await axios.get(url)
@@ -117,7 +117,7 @@ export async function searchActors(search: string): Promise<IFilterOptions[]> {
   return list
 }
 
-export async function searchPolls(search: string): Promise<IFilterOptions[]> {
+export async function searchPolls(search: string): Promise<IFilterOption[]> {
   if (!search) return []
   let url = `${apiUrl}/polls/search?search=${search}`
   const { data } = await axios.get(url)

@@ -11,23 +11,7 @@ import {
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, memo, useCallback, useEffect, useState } from 'react'
-import {
-  currentYear,
-  defaultActors,
-  defaultCategories,
-  defaultCountries,
-  defaultDateRelease,
-  defaultDirectors,
-  defaultDuration,
-  defaultFilters,
-  defaultGenres,
-  defaultImage,
-  defaultPolls,
-  defaultPopularity,
-  defaultRating,
-  defaultReleased,
-  staleTime,
-} from '../../constants.js'
+import { currentYear, defaultFilters, staleTime } from '../../constants.js'
 import {
   getActors,
   getCategories,
@@ -40,8 +24,8 @@ import {
   searchDirectors,
   searchPolls,
 } from '../../services/movies.js'
-import { IFilterOptions, IFilters } from '../../types.js'
-import { convertToHours, formatOption, getYear } from '../../utils.js'
+import { IFilterOption, IFilters, isFilterOptions } from '../../types.js'
+import { convertToHours, formatOptions } from '../../utils.js'
 import { AutoCompleteLabelChip } from './AutocompleteLabelChip.js'
 import { BasicSelect } from './BasicSelect.js'
 import { MultiSelectLabelsChip } from './MultiSelectLabelChip.js'
@@ -49,32 +33,18 @@ import { RangeSlider } from './RangeSlider.js'
 
 type IFiltersProps = {
   filters: IFilters
-  onFiltersChange: Dispatch<SetStateAction<IFilters>>
+  setFilters: Dispatch<SetStateAction<IFilters>>
   moviesSelected: IMovie[]
   setMoviesSelected: Dispatch<SetStateAction<IMovie[]>>
 }
 
 export const Filters = memo(
-  ({ filters, onFiltersChange, moviesSelected, setMoviesSelected }: IFiltersProps): JSX.Element => {
-    const [ratings, setRatings] = useState<number[]>(filters.rating)
-    const [years, setYears] = useState<number[]>(filters.dateRelease)
-    const [durations, setDurations] = useState<number[]>(filters.duration)
-    const [popularity, setPopularity] = useState<number[]>(filters.popularity)
-    const [directorsSelected, setDirectorsSelected] = useState<IFilterOptions[]>(filters.directors)
-    const [actorsSelected, setActorsSelected] = useState<IFilterOptions[]>(filters.actors)
-    const [pollsSelected, setPollsSelected] = useState<IFilterOptions[]>(filters.polls)
-    const [categoriesSelected, setCategoriesSelected] = useState<string[]>(filters.categories)
-    const [genresSelected, setGenresSelected] = useState<string[]>(filters.genres)
-    const [countriesSelected, setCountriesSelected] = useState<string[]>(filters.countries)
-    const [sort, setSort] = useState(filters.sortValue)
-    const [sortOrder, setSortOrder] = useState(filters.sortOrder)
-    const [image, setImage] = useState<string>(filters.image)
-    const [released, setReleased] = useState<boolean>(filters.released)
+  ({ filters, setFilters, moviesSelected, setMoviesSelected }: IFiltersProps): JSX.Element => {
     const [movieOptions, setMovieOptions] = useState<readonly IMovie[]>([])
+    const [directorOptions, setDirectorOptions] = useState<IFilterOption[]>([])
+    const [actorOptions, setActorOptions] = useState<IFilterOption[]>([])
+    const [pollOptions, setPollOptions] = useState<IFilterOption[]>([])
     const [movieSearch, setMovieSearch] = useState('')
-    const [directorOptions, setDirectorOptions] = useState<readonly IFilterOptions[]>([])
-    const [actorOptions, setActorOptions] = useState<readonly IFilterOptions[]>([])
-    const [pollOptions, setPollOptions] = useState<readonly IFilterOptions[]>([])
     const [directorSearch, setDirectorSearch] = useState<string>('')
     const [actorSearch, setActorSearch] = useState<string>('')
     const [pollSearch, setPollSearch] = useState<string>('')
@@ -114,21 +84,25 @@ export const Filters = memo(
       else setDirectorSearch(value)
     }
 
-    const directorSelectionChange = (_event: SyntheticEvent, values: string[]) => {
-      if (values.length < directorsSelected.length) unselectDirector(values)
-      else selectDirector(values[values.length - 1])
+    const filterSelectionChange = (property: 'directors' | 'actors' | 'polls') => {
+      return (_event: SyntheticEvent, values: (string | IFilterOption)[]) => {
+        if (!isFilterOptions(values)) return
+        if (values.length < filters[property].length) unselect(property, values)
+        else select(property, values[values.length - 1])
+      }
     }
 
-    const unselectDirector = (values: string[]) => {
-      const filtered = directorsSelected.filter((director) => values.find((value) => value === director.name))
-      setDirectorsSelected(filtered)
+    const unselect = (property: 'directors' | 'actors' | 'polls', values: IFilterOption[]) => {
+      const newSelection = filters[property].filter((selected) => values.find((value) => value.id === selected.id))
+      const newFilters = { ...filters, [property]: newSelection }
+      setFilters(newFilters)
     }
 
-    const selectDirector = (value: string) => {
-      const newSelection = [...directorsSelected]
-      const selected = directorOptions.find((director) => director.name === value)
-      if (selected) newSelection.push(selected)
-      setDirectorsSelected(newSelection)
+    const select = (property: 'directors' | 'actors' | 'polls', value: IFilterOption) => {
+      const newSelection = [...filters[property]]
+      if (value && !newSelection.find(({ id }) => id === value.id)) newSelection.push(value)
+      const newFilters = { ...filters, [property]: newSelection }
+      setFilters(newFilters)
     }
 
     const { data: directorSearchResult } = useQuery({
@@ -140,31 +114,9 @@ export const Filters = memo(
       if (directorSearchResult) setDirectorOptions(directorSearchResult)
     }, [directorSearchResult])
 
-    useEffect(() => {
-      const newFilters = { ...filters, directors: directorsSelected }
-      onFiltersChange(newFilters)
-    }, [directorsSelected])
-
     const handleActorSearch = (_event: SyntheticEvent, value: string) => {
       if (!value && actors) setActorOptions(actors)
       else setActorSearch(value)
-    }
-
-    const actorSelectionChange = (_event: SyntheticEvent, values: string[]) => {
-      if (values.length < actorsSelected.length) unselectActor(values)
-      else selectActor(values[values.length - 1])
-    }
-
-    const unselectActor = (values: string[]) => {
-      const filtered = actorsSelected.filter((actor) => values.find((value) => value === actor.name))
-      setActorsSelected(filtered)
-    }
-
-    const selectActor = (value: string) => {
-      const newSelection = [...actorsSelected]
-      const selected = actorOptions.find((actor) => actor.name === value)
-      if (selected) newSelection.push(selected)
-      setActorsSelected(newSelection)
     }
 
     const { data: actorSearchResult } = useQuery({
@@ -176,31 +128,9 @@ export const Filters = memo(
       if (actorSearchResult) setActorOptions(actorSearchResult)
     }, [actorSearchResult])
 
-    useEffect(() => {
-      const newFilters = { ...filters, actors: actorsSelected }
-      onFiltersChange(newFilters)
-    }, [actorsSelected])
-
     const handlePollSearch = (_event: SyntheticEvent, value: string) => {
       if (!value && polls) setPollOptions(polls)
       else setPollSearch(value)
-    }
-
-    const pollSelectionChange = (_event: SyntheticEvent, values: string[]) => {
-      if (values.length < pollsSelected.length) unselectPoll(values)
-      else selectPoll(values[values.length - 1])
-    }
-
-    const unselectPoll = (values: string[]) => {
-      const filtered = pollsSelected.filter((poll) => values.find((value) => value === poll.name))
-      setPollsSelected(filtered)
-    }
-
-    const selectPoll = (value: string) => {
-      const newSelection = [...pollsSelected]
-      const selected = pollOptions.find((poll) => poll.name === value)
-      if (selected) newSelection.push(selected)
-      setPollsSelected(newSelection)
     }
 
     const { data: pollSearchResult } = useQuery({
@@ -211,11 +141,6 @@ export const Filters = memo(
     useEffect(() => {
       if (pollSearchResult) setPollOptions(pollSearchResult)
     }, [pollSearchResult])
-
-    useEffect(() => {
-      const newFilters = { ...filters, polls: pollsSelected }
-      onFiltersChange(newFilters)
-    }, [pollsSelected])
 
     const categories = useQuery({
       queryKey: ['categories'],
@@ -242,51 +167,32 @@ export const Filters = memo(
     })
 
     const handleReset = useCallback(() => {
-      setRatings(defaultRating)
-      setYears(defaultDateRelease)
-      setDurations(defaultDuration)
-      setPopularity(defaultPopularity)
-      setDirectorsSelected(defaultDirectors)
-      setActorsSelected(defaultActors)
-      setPollsSelected(defaultPolls)
-      setCategoriesSelected(defaultCategories)
-      setGenresSelected(defaultGenres)
-      setCountriesSelected(defaultCountries)
-      setSort('tmdb')
-      setSortOrder('')
-      setImage(defaultImage)
-      setReleased(defaultReleased)
-
-      onFiltersChange(defaultFilters)
+      setFilters(defaultFilters)
     }, [filters])
 
     const toggleReleased = (event: ChangeEvent<HTMLInputElement>) => {
-      setReleased(event.target.checked)
       const newFilters = { ...filters, released: event.target.checked }
-      onFiltersChange(newFilters)
+      setFilters(newFilters)
     }
 
     const handleMovieSearch = (_event: SyntheticEvent, value: string) => {
       setMovieSearch(value)
     }
 
-    const movieSearchChange = (_event: SyntheticEvent, values: string[]) => {
+    const movieSelectionChange = (_event: SyntheticEvent, values: (string | IFilterOption)[]) => {
+      if (!isFilterOptions(values)) return
       if (values.length < moviesSelected.length) unselectMovie(values)
       else selectMovie(values[values.length - 1])
     }
 
-    const unselectMovie = (values: string[]) => {
-      const filtered = moviesSelected.filter((movie) =>
-        values.find((value) => value === `${movie.senscritique.title} (${getYear(movie.senscritique.dateRelease)})`),
-      )
+    const unselectMovie = (movies: IFilterOption[]) => {
+      const filtered = moviesSelected.filter((selected) => movies.find((movie) => movie.id === selected.id))
       setMoviesSelected(filtered)
     }
 
-    const selectMovie = (value: string) => {
+    const selectMovie = (movie: IFilterOption) => {
       const newSelection = [...moviesSelected]
-      const selected = movieOptions.find(
-        (movie) => `${movie.senscritique.title} (${getYear(movie.senscritique.dateRelease)})` === value,
-      )
+      const selected = movieOptions.find((selected) => selected.id === movie.id)
       if (selected) newSelection.push(selected)
       setMoviesSelected(newSelection)
     }
@@ -297,7 +203,9 @@ export const Filters = memo(
 
     return (
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMore />}>Filtres</AccordionSummary>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <h2>Filtres</h2>
+        </AccordionSummary>
         <AccordionDetails className="accordion">
           <div className="filters">
             <RangeSlider
@@ -307,9 +215,8 @@ export const Filters = memo(
               max={10}
               step={0.1}
               filters={filters}
-              onFiltersChange={onFiltersChange}
-              values={ratings}
-              setValues={setRatings}
+              setFilters={setFilters}
+              filterValues={filters.rating}
             ></RangeSlider>
             <RangeSlider
               label="Année"
@@ -318,9 +225,8 @@ export const Filters = memo(
               max={currentYear}
               step={1}
               filters={filters}
-              onFiltersChange={onFiltersChange}
-              values={years}
-              setValues={setYears}
+              setFilters={setFilters}
+              filterValues={filters.dateRelease}
             ></RangeSlider>
             <RangeSlider
               label="Durée"
@@ -329,11 +235,10 @@ export const Filters = memo(
               max={18000}
               step={60}
               filters={filters}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
               convertLabel={true}
               convertLabelFn={convertToHours}
-              values={durations}
-              setValues={setDurations}
+              filterValues={filters.duration}
             ></RangeSlider>
             <RangeSlider
               label="Popularité"
@@ -342,118 +247,107 @@ export const Filters = memo(
               max={30}
               step={0.1}
               filters={filters}
-              onFiltersChange={onFiltersChange}
-              values={popularity}
-              setValues={setPopularity}
+              setFilters={setFilters}
+              filterValues={filters.popularity}
             ></RangeSlider>
             <MultiSelectLabelsChip
               name="categories"
               filters={filters}
               data={categories.data?.map((category, index) => ({ label: category, id: index })) || []}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
               label="Catégories"
-              values={categoriesSelected}
-              setValues={setCategoriesSelected}
+              values={filters.categories}
             ></MultiSelectLabelsChip>
             <MultiSelectLabelsChip
               name="countries"
               filters={filters}
               data={countries.data?.map((country, index) => ({ label: country, id: index })) || []}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
               label="Pays"
-              values={countriesSelected}
-              setValues={setCountriesSelected}
+              values={filters.countries}
             ></MultiSelectLabelsChip>
             <MultiSelectLabelsChip
               name="genres"
               filters={filters}
               data={genres.data?.map((genre, index) => ({ label: genre, id: index })) || []}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
               label="Genres"
-              values={genresSelected}
-              setValues={setGenresSelected}
+              values={filters.genres}
             ></MultiSelectLabelsChip>
             <BasicSelect
               label="Tri"
               name="sortValue"
-              value={sort}
-              setValue={setSort}
+              value={filters.sortValue}
               items={[
-                { label: 'Note', value: 'rating' },
-                { label: 'Année', value: 'dateRelease' },
-                { label: 'Durée', value: 'duration' },
+                { label: 'Note', value: 'senscritique.rating' },
+                { label: 'Année', value: 'senscritique.dateRelease' },
+                { label: 'Durée', value: 'senscritique.duration' },
                 { label: 'Popularité Senscritique', value: 'popularity' },
-                { label: 'Popularité TMDB', value: 'tmdb' },
+                { label: 'Popularité TMDB', value: 'tmdb.popularity' },
               ]}
               filters={filters}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
             ></BasicSelect>
             <BasicSelect
               label="Ordre"
               name="sortOrder"
-              value={sortOrder}
-              setValue={setSortOrder}
+              value={filters.sortOrder}
               items={[
                 { label: 'Ascendant', value: 'asc' },
                 { label: 'Descendant', value: 'desc' },
               ]}
               filters={filters}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
             ></BasicSelect>
             <BasicSelect
               label="Image"
               name="image"
-              value={image}
-              setValue={setImage}
+              value={filters.image}
               items={[
                 { label: 'Senscritique', value: 'senscritique' },
                 { label: 'TMDB', value: 'tmdb' },
                 { label: 'Random', value: 'random' },
               ]}
               filters={filters}
-              onFiltersChange={onFiltersChange}
+              setFilters={setFilters}
             ></BasicSelect>
             <FormGroup>
               <FormControlLabel
-                control={<Switch id="switch-released" checked={released} onChange={toggleReleased} />}
-                label="Released"
+                control={<Switch id="switch-released" checked={filters.released} onChange={toggleReleased} />}
+                label="Dispo"
               />
             </FormGroup>
             <AutoCompleteLabelChip
-              options={movieOptions.map(
-                (movie) => `${movie.senscritique.title} ${formatOption(movie.senscritique.dateRelease)}`,
-              )}
-              label="Sélection"
-              value={moviesSelected.map(
-                (movie) => `${movie.senscritique.title} ${formatOption(movie.senscritique.dateRelease)}`,
-              )}
-              onInputChange={handleMovieSearch}
-              onChange={movieSearchChange}
-            />
-            <AutoCompleteLabelChip
-              options={directorOptions.map((director) => director.name)}
+              options={directorOptions}
               label="Réalisateurs"
-              value={directorsSelected.map((director) => director.name)}
+              value={filters.directors}
               onInputChange={handleDirectorSearch}
-              onChange={directorSelectionChange}
+              onChange={filterSelectionChange('directors')}
             />
             <AutoCompleteLabelChip
-              options={actorOptions.map((actor) => actor.name)}
+              options={actorOptions}
               label="Acteurs"
-              value={actorsSelected.map((actor) => actor.name)}
+              value={filters.actors}
               onInputChange={handleActorSearch}
-              onChange={actorSelectionChange}
+              onChange={filterSelectionChange('actors')}
             />
             <AutoCompleteLabelChip
-              options={pollOptions.map((poll) => poll.name)}
+              options={pollOptions}
               label="Tops"
-              value={pollsSelected.map((poll) => poll.name)}
+              value={filters.polls}
               onInputChange={handlePollSearch}
-              onChange={pollSelectionChange}
+              onChange={filterSelectionChange('polls')}
             />
             <Button onClick={handleReset} className="filter" variant="outlined" startIcon={<Cancel />}>
               Reset
             </Button>
+            <AutoCompleteLabelChip
+              options={movieOptions.map((movie) => formatOptions(movie))}
+              label="Sélection"
+              value={moviesSelected.map((movie) => formatOptions(movie))}
+              onInputChange={handleMovieSearch}
+              onChange={movieSelectionChange}
+            />
           </div>
         </AccordionDetails>
       </Accordion>

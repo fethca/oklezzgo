@@ -37,7 +37,7 @@ const columns: GridColDef[] = [
 
 type IDataTableProps = {
   movie: Omit<IMovie, 'opsDatas'>
-  rows: { _id: string }[]
+  rows: { id: string }[]
   pageSize: number
   handleUpdate: () => void
 }
@@ -47,7 +47,6 @@ export const DataTable = memo(({ movie, rows, pageSize, handleUpdate }: IDataTab
   const { showSnackBar } = useSnackBar()
 
   const handleDownload = async () => {
-    console.log('Rowselected', rowSelected)
     for (const id of rowSelected) {
       const url = `${id}`
       window.open(url, `_blank`)
@@ -70,7 +69,7 @@ export const DataTable = memo(({ movie, rows, pageSize, handleUpdate }: IDataTab
     onRowSelectionModelChange: handleSelect,
     autoHeight: pageSize > 5 ? true : false,
     checkboxSelection: true,
-    getRowId: (row: { _id: string }) => row._id,
+    getRowId: (row: { id: string }) => row.id,
     slots: {
       footer: () => (
         <DataTableFooter
