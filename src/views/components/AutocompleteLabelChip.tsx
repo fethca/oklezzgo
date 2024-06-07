@@ -1,6 +1,6 @@
 import { Autocomplete, Chip, TextField } from '@mui/material'
 import { SyntheticEvent, memo } from 'react'
-import { IFilterOption } from '../../types.ts'
+import { IFilterOption } from '../../types.js'
 
 type IMultiSelectProps = {
   label: string

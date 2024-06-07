@@ -1,5 +1,5 @@
 import { IMovie, ITmdb, tmdbSchemaFormat } from '@fethcat/shared/types'
-import { IFilterOption } from './types.ts'
+import { IFilterOption } from './types.js'
 
 export function convertToHours(value: number, separator = ':', trail = '') {
   const date: Date = new Date()
