@@ -14,7 +14,7 @@ type ICardSmallProps = {
   secondIconAction?: () => void
 }
 
-export const CardSmall = memo(
+const CardSmall = memo(
   ({
     Bookmark,
     cover,
@@ -54,3 +54,6 @@ export const CardSmall = memo(
     )
   },
 )
+
+CardSmall.displayName = 'CardSmall'
+export { CardSmall }

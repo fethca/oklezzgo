@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-export const Logo = memo(({ style }: { style?: React.CSSProperties }): JSX.Element => {
+const Logo = memo(({ style }: { style?: React.CSSProperties }): JSX.Element => {
   return (
     <svg
       width={'150px'}
@@ -76,3 +76,6 @@ export const Logo = memo(({ style }: { style?: React.CSSProperties }): JSX.Eleme
     </svg>
   )
 })
+
+Logo.displayName = 'Logo'
+export { Logo }

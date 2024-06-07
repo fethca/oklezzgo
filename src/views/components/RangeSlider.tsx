@@ -16,7 +16,7 @@ interface IRangeSliderProps {
   filterValues: number[]
 }
 
-export const RangeSlider = memo(
+const RangeSlider = memo(
   ({
     label,
     name,
@@ -31,30 +31,36 @@ export const RangeSlider = memo(
   }: IRangeSliderProps): JSX.Element => {
     const [values, setValues] = useState<number[]>(filterValues)
 
-    const onChange = useCallback((_event: Event, newValue: number | number[]) => {
-      setValues(newValue as number[])
-    }, [])
+    const onChange = useCallback(
+      (_event: Event, newValue: number | number[]) => {
+        setValues(newValue as number[])
+      },
+      [setValues],
+    )
 
-    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-      let newValues = [...values]
-      const newValue = event.target.value === '' ? min : Number(event.target.value)
-      if (event.target.id.startsWith('min')) newValues[0] = newValue
-      if (event.target.id.startsWith('max')) newValues[1] = newValue
-      setValues(newValues)
-    }
+    const onInputChange = useCallback(
+      (event: ChangeEvent<HTMLInputElement>) => {
+        const newValues = [...values]
+        const newValue = event.target.value === '' ? min : Number(event.target.value)
+        if (event.target.id.startsWith('min')) newValues[0] = newValue
+        if (event.target.id.startsWith('max')) newValues[1] = newValue
+        setValues(newValues)
+      },
+      [values, setValues, min],
+    )
 
     const onCommitted = useCallback(() => {
       const newFilters = { ...filters }
       newFilters[name] = values
       setFilters(newFilters)
-    }, [values])
+    }, [values, filters, name, setFilters])
 
-    const onClear = () => {
+    const onClear = useCallback(() => {
       setValues([min, max])
       const newFilters = { ...filters }
       newFilters[name] = [min, max]
       setFilters(newFilters)
-    }
+    }, [setValues, max, min, name, filters, setFilters])
 
     return (
       <div className="range-slider">
@@ -109,3 +115,6 @@ export const RangeSlider = memo(
     )
   },
 )
+
+RangeSlider.displayName = 'RangeSlider'
+export { RangeSlider }

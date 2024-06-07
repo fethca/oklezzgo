@@ -50,42 +50,42 @@ export async function getTMDB(search: string): Promise<ITmdb[]> {
 }
 
 export async function getDirectors({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
-  let url = `${apiUrl}/directors?pageSize=${pageSize}`
+  const url = `${apiUrl}/directors?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { directors } = data
   return directors
 }
 
 export async function getActors({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
-  let url = `${apiUrl}/actors?pageSize=${pageSize}`
+  const url = `${apiUrl}/actors?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { actors } = data
   return actors
 }
 
 export async function getPolls({ pageSize } = { pageSize: 300 }): Promise<IFilterOption[]> {
-  let url = `${apiUrl}/polls?pageSize=${pageSize}`
+  const url = `${apiUrl}/polls?pageSize=${pageSize}`
   const { data } = await axios.get(url)
   const { polls } = data
   return polls
 }
 
 export async function getCategories(): Promise<string[]> {
-  let url = `${apiUrl}/categories`
+  const url = `${apiUrl}/categories`
   const { data } = await axios.get(url)
   const { categories } = data
   return categories
 }
 
 export async function getCountries(): Promise<string[]> {
-  let url = `${apiUrl}/countries`
+  const url = `${apiUrl}/countries`
   const { data } = await axios.get(url)
   const { countries } = data
   return countries
 }
 
 export async function getGenres({ source }: { source: 'senscritique' | 'tmdb' }): Promise<string[]> {
-  let url = `${apiUrl}/genres?source=${source}`
+  const url = `${apiUrl}/genres?source=${source}`
   const { data } = await axios.get(url)
   const { genres } = data
   return genres
@@ -93,7 +93,7 @@ export async function getGenres({ source }: { source: 'senscritique' | 'tmdb' })
 
 export async function getMovieList(search: string): Promise<IMovie[]> {
   if (!search) return []
-  let url = `${apiUrl}/list?search=${search}`
+  const url = `${apiUrl}/list?search=${search}`
   const { data } = await axios.get(url)
   const { list } = data
   return list
@@ -101,7 +101,7 @@ export async function getMovieList(search: string): Promise<IMovie[]> {
 
 export async function searchDirectors(search: string): Promise<IFilterOption[]> {
   if (!search) return []
-  let url = `${apiUrl}/directors/search?search=${search}`
+  const url = `${apiUrl}/directors/search?search=${search}`
   const { data } = await axios.get(url)
   const { list } = data
   return list
@@ -109,7 +109,7 @@ export async function searchDirectors(search: string): Promise<IFilterOption[]> 
 
 export async function searchActors(search: string): Promise<IFilterOption[]> {
   if (!search) return []
-  let url = `${apiUrl}/actors/search?search=${search}`
+  const url = `${apiUrl}/actors/search?search=${search}`
   const { data } = await axios.get(url)
   const { list } = data
   return list
@@ -117,7 +117,7 @@ export async function searchActors(search: string): Promise<IFilterOption[]> {
 
 export async function searchPolls(search: string): Promise<IFilterOption[]> {
   if (!search) return []
-  let url = `${apiUrl}/polls/search?search=${search}`
+  const url = `${apiUrl}/polls/search?search=${search}`
   const { data } = await axios.get(url)
   const { list } = data
   return list

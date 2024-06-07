@@ -9,8 +9,9 @@ type EmblaProps<T extends EmblaSlide> = {
   options?: EmblaOptionsType
 }
 
-export function EmblaCarousel<T extends EmblaSlide>({ slides, Slide, options }: EmblaProps<T>): JSX.Element {
+export const EmblaCarousel = <T extends EmblaSlide>({ slides, Slide, options }: EmblaProps<T>): JSX.Element => {
   const [emblaRef] = useEmblaCarousel(options)
+  console.log('In embla', slides)
   return (
     <div className="embla">
       <div className="embla__viewport" ref={emblaRef}>

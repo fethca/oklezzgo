@@ -1,7 +1,7 @@
 import { Skeleton, Stack } from '@mui/material'
 import { memo } from 'react'
 
-export const CardsSkeleton = memo((): JSX.Element => {
+const CardsSkeleton = memo((): JSX.Element => {
   return (
     <>
       {[...Array(24).keys()].map((key) => (
@@ -20,3 +20,6 @@ export const CardsSkeleton = memo((): JSX.Element => {
     </>
   )
 })
+
+CardsSkeleton.displayName = 'CardsSkeleton'
+export { CardsSkeleton }

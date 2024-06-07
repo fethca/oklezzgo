@@ -10,7 +10,7 @@ type IMultiSelectProps = {
   onChange: (_event: SyntheticEvent, values: (string | IFilterOption)[]) => void
 }
 
-export const AutoCompleteLabelChip = memo(({ label, options, value, onChange, onInputChange }: IMultiSelectProps) => {
+const AutoCompleteLabelChip = memo(({ label, options, value, onChange, onInputChange }: IMultiSelectProps) => {
   return (
     <div className="filter">
       <Autocomplete
@@ -32,3 +32,6 @@ export const AutoCompleteLabelChip = memo(({ label, options, value, onChange, on
     </div>
   )
 })
+
+AutoCompleteLabelChip.displayName = 'AutoCompleteLabelChip'
+export { AutoCompleteLabelChip }

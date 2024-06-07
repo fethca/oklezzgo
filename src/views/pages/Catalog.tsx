@@ -5,7 +5,7 @@ import { IFilters } from '../../types.js'
 import { Filters } from '../components/Filters.js'
 import { Movies } from './Movies.js'
 
-export const Catalog = memo((): JSX.Element => {
+const Catalog = memo((): JSX.Element => {
   const [filters, setFilters] = useState<IFilters>(defaultFilters)
   const [moviesSelected, setMoviesSelected] = useState<IMovie[]>([])
 
@@ -26,3 +26,6 @@ export const Catalog = memo((): JSX.Element => {
     </div>
   )
 })
+
+Catalog.displayName = 'Catalog'
+export { Catalog }

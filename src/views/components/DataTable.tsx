@@ -41,7 +41,7 @@ type IDataTableProps = {
   handleUpdate: () => void
 }
 
-export const DataTable = memo(({ rows, pageSize }: IDataTableProps) => {
+const DataTable = memo(({ rows, pageSize }: IDataTableProps) => {
   const [rowSelected, setRowSelected] = useState<GridRowId[]>([])
   // const { showSnackBar } = useSnackBar()
 
@@ -93,3 +93,6 @@ export const DataTable = memo(({ rows, pageSize }: IDataTableProps) => {
 })
 
 const StyledDataGrid = styled(DataGrid)(() => ({}))
+
+DataTable.displayName = 'DataTable'
+export { DataTable }

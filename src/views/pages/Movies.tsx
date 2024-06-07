@@ -20,7 +20,7 @@ type IMoviesProps = {
   setMoviesSelected: Dispatch<SetStateAction<IMovie[]>>
 }
 
-export const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }: IMoviesProps): JSX.Element => {
+const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }: IMoviesProps): JSX.Element => {
   const { ref, inView } = useInView()
   const { showSnackBar } = useSnackBar()
 
@@ -77,10 +77,10 @@ export const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSele
       setDetailMovie(randomizedMovie)
       setDetailLoading(false)
     }
-  }, [randomizedMovie])
+  }, [randomizedMovie, randomizeMovieLoading])
 
   const select = (value: IMovie) => {
-    let newSelection = [...moviesSelected]
+    const newSelection = [...moviesSelected]
     const index = newSelection.findIndex((movie) => movie.id === value.id)
     if (index !== -1) {
       newSelection.splice(index, 1)
@@ -198,3 +198,7 @@ const Container = memo(
     )
   },
 )
+
+Container.displayName = 'Container'
+Movies.displayName = 'Movies'
+export { Movies }

@@ -1,5 +1,5 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { Dispatch, SetStateAction, memo, useCallback } from 'react'
+import { Dispatch, SetStateAction, memo } from 'react'
 import { IFilters } from '../../types.js'
 
 interface ISelectProps {
@@ -12,16 +12,13 @@ interface ISelectProps {
   resetOption?: boolean
 }
 
-export const BasicSelect = memo(({ label, name, items, filters, setFilters, value, resetOption }: ISelectProps) => {
-  const handleChange = useCallback(
-    (event: SelectChangeEvent) => {
-      const { value } = event.target
-      const newFilters = { ...filters }
-      newFilters[name] = value
-      setFilters(newFilters)
-    },
-    [filters],
-  )
+const BasicSelect = memo(({ label, name, items, filters, setFilters, value, resetOption }: ISelectProps) => {
+  const handleChange = (event: SelectChangeEvent) => {
+    const { value } = event.target
+    const newFilters = { ...filters }
+    newFilters[name] = value
+    setFilters(newFilters)
+  }
 
   return (
     <div className="filter">
@@ -45,3 +42,6 @@ export const BasicSelect = memo(({ label, name, items, filters, setFilters, valu
     </div>
   )
 })
+
+BasicSelect.displayName = 'BasicSelect'
+export { BasicSelect }

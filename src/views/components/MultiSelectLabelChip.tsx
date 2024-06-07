@@ -32,21 +32,27 @@ function getStyles(id: number, items: readonly { label: string; id: number }[], 
   }
 }
 
-export const MultiSelectLabelsChip = memo(({ label, name, data, filters, setFilters, values }: IMultiSelectProps) => {
+const MultiSelectLabelsChip = memo(({ label, name, data, filters, setFilters, values }: IMultiSelectProps) => {
   const theme = useTheme()
 
-  const handleChange = useCallback((event: SelectChangeEvent<string[]>) => {
-    const values = event.target.value
-    const newFilters = { ...filters }
-    newFilters[name] = typeof values === 'string' ? values.split(',') : values
-    setFilters(newFilters)
-  }, [])
+  const handleChange = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
+      const values = event.target.value
+      const newFilters = { ...filters }
+      newFilters[name] = typeof values === 'string' ? values.split(',') : values
+      setFilters(newFilters)
+    },
+    [filters, name, setFilters],
+  )
 
-  const handleDelete = (deleteValue: string) => {
-    const newFilters = { ...filters }
-    newFilters[name] = values.filter((value) => value != deleteValue) || []
-    setFilters(newFilters)
-  }
+  const handleDelete = useCallback(
+    (deleteValue: string) => {
+      const newFilters = { ...filters }
+      newFilters[name] = values.filter((value) => value != deleteValue) || []
+      setFilters(newFilters)
+    },
+    [filters, name, values, setFilters],
+  )
 
   return (
     <div className="filter">
@@ -82,3 +88,6 @@ export const MultiSelectLabelsChip = memo(({ label, name, data, filters, setFilt
     </div>
   )
 })
+
+MultiSelectLabelsChip.displayName = 'MultiSelectLabelsChip'
+export { MultiSelectLabelsChip }

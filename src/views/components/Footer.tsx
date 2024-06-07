@@ -4,7 +4,7 @@ import { Logo } from './Logo.js'
 const year = new Date().getFullYear()
 const version = __APP_VERSION__
 
-export const Footer = memo((): JSX.Element => {
+const Footer = memo((): JSX.Element => {
   return (
     <div className="footer">
       <Logo style={{ fill: 'turquoise' }} />
@@ -13,3 +13,6 @@ export const Footer = memo((): JSX.Element => {
     </div>
   )
 })
+
+Footer.displayName = 'Footer'
+export { Footer }

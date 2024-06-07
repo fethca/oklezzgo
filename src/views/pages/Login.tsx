@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { SessionContext } from '../../contexts/SessionContext.js'
 import { Logo } from '../components/Logo.js'
 
-export const Login = memo((): JSX.Element => {
+const Login = memo((): JSX.Element => {
   const session = useContext(SessionContext)
   if (session) return <Navigate to="/" />
 
@@ -20,3 +20,6 @@ export const Login = memo((): JSX.Element => {
     </Container>
   )
 })
+
+Login.displayName = 'Login'
+export { Login }

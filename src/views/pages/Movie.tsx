@@ -29,7 +29,7 @@ type IMovieProps = {
   SecondIcon?: ReactElement<IconProps>
 }
 
-export const Movie = memo(({ movie, image, openDialog, select, SecondIcon }: IMovieProps): JSX.Element => {
+const Movie = memo(({ movie, image, openDialog, select, SecondIcon }: IMovieProps): JSX.Element => {
   const cover = useMemo(() => {
     return getImage(movie, image)
   }, [movie, image])
@@ -51,3 +51,6 @@ export const Movie = memo(({ movie, image, openDialog, select, SecondIcon }: IMo
     </>
   )
 })
+
+Movie.displayName = 'Movie'
+export { Movie }

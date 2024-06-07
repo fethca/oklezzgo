@@ -1,5 +1,5 @@
 import { Alert, AlertColor, Snackbar } from '@mui/material'
-import { createContext, useCallback, useContext, useState } from 'react'
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from 'react'
 
 type ISnackbar = {
   id: number
@@ -14,11 +14,7 @@ type SnackBarContextActions = {
 
 const SnackbarContext = createContext({} as SnackBarContextActions)
 
-interface SnackBarContextProviderProps {
-  children: React.ReactNode
-}
-
-const SnackBarProvider: React.FC<SnackBarContextProviderProps> = ({ children }) => {
+const SnackBarProvider: FC<PropsWithChildren> = ({ children }) => {
   const [snackbars, setSnackbars] = useState<ISnackbar[]>([])
   const [counter, setCounter] = useState(0)
 

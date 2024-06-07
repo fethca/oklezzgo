@@ -3,7 +3,7 @@ import { Rating } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { memo } from 'react'
 
-export const CardFooter = memo(({ rating }: { rating: number }): JSX.Element => {
+const CardFooter = memo(({ rating }: { rating: number }): JSX.Element => {
   return (
     <>
       <Rating
@@ -17,3 +17,6 @@ export const CardFooter = memo(({ rating }: { rating: number }): JSX.Element => 
     </>
   )
 })
+
+CardFooter.displayName = 'CardFooter'
+export { CardFooter }

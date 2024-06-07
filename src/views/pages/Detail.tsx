@@ -75,7 +75,7 @@ function getActorImage(url: string) {
   return url
 }
 
-export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, setFilters }: IDetailProps) => {
+const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, setFilters }: IDetailProps) => {
   const [tmdbSearch, setTMDBSearch] = useState<string>('')
   const loadingRef = useRef<HTMLDivElement>(null)
   // const { showSnackBar } = useSnackBar()
@@ -120,14 +120,14 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, fi
     refreshList()
   }
 
-  const handleSearchTMDB = async (event: FormEvent<SearchForm>) => {
+  const handleSearchTMDB = (event: FormEvent<SearchForm>) => {
     event.preventDefault()
     setTMDBSearch(event.currentTarget.searchInput.value)
   }
 
   useEffect(() => {
     if (!loading && open && movie.tmdb) setTMDBSearch(movie.tmdb.title)
-  }, [movie])
+  }, [movie, loading, open])
 
   if (loading) {
     return (
@@ -292,3 +292,6 @@ export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, fi
     </Dialog>
   )
 })
+
+Detail.displayName = 'Detail'
+export { Detail }

@@ -7,7 +7,7 @@ type ICardWideProps = {
   onClick: () => void
 }
 
-export const CardWide = memo(({ cover, name, onClick }: ICardWideProps): JSX.Element => {
+const CardWide = memo(({ cover, name, onClick }: ICardWideProps): JSX.Element => {
   return (
     <Card sx={{ width: 350, height: '100%' }}>
       <CardActionArea sx={{ height: '100%' }} onClick={onClick}>
@@ -21,3 +21,6 @@ export const CardWide = memo(({ cover, name, onClick }: ICardWideProps): JSX.Ele
     </Card>
   )
 })
+
+CardWide.displayName = 'CardWide'
+export { CardWide }

@@ -14,7 +14,7 @@ type IAccordionFormProps = {
   secondButtonAction?: (inputValue: string) => void
 }
 
-export const AccordionForm = memo(
+const AccordionForm = memo(
   ({
     buttonLabel,
     inputLabel,
@@ -53,3 +53,6 @@ export const AccordionForm = memo(
     )
   },
 )
+
+AccordionForm.displayName = 'AccordionForm'
+export { AccordionForm }

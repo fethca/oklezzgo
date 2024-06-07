@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { useSession } from '../../contexts/SessionContext.js'
 import { Logo } from './Logo.js'
 
-export const NavBar = memo((): JSX.Element => {
+const NavBar = memo((): JSX.Element => {
   const session = useSession()
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -21,3 +21,6 @@ export const NavBar = memo((): JSX.Element => {
     </Box>
   )
 })
+
+NavBar.displayName = 'NavBar'
+export { NavBar }

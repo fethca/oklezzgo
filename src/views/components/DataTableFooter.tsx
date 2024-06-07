@@ -10,7 +10,7 @@ type IFooterProps = {
   rowSelected: boolean
 }
 
-export const DataTableFooter = memo(({ rowSelected, onDownload, onDelete, onFavorite }: IFooterProps): JSX.Element => {
+const DataTableFooter = memo(({ rowSelected, onDownload, onDelete, onFavorite }: IFooterProps): JSX.Element => {
   return (
     <GridFooterContainer className="data-grid__footer">
       <GridFooter></GridFooter>
@@ -30,3 +30,6 @@ export const DataTableFooter = memo(({ rowSelected, onDownload, onDelete, onFavo
     </GridFooterContainer>
   )
 })
+
+DataTableFooter.displayName = 'DataTableFooter'
+export { DataTableFooter }
