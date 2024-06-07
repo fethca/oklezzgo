@@ -2,9 +2,9 @@ name: Build Docker Image
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
-      
+    branches:
+      - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
