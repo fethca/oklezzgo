@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { IMovie } from '@fethcat/shared/types'
 import { DataGrid, GridColDef, GridRowId, GridRowSelectionModel } from '@mui/x-data-grid'
 import { memo, useState } from 'react'
-import { useSnackBar } from '../../contexts/SnackbarContext.js'
 import { DataTableFooter } from './DataTableFooter.js'
 
 const now = new Date()
@@ -42,9 +41,9 @@ type IDataTableProps = {
   handleUpdate: () => void
 }
 
-export const DataTable = memo(({ movie, rows, pageSize, handleUpdate }: IDataTableProps) => {
+export const DataTable = memo(({ rows, pageSize }: IDataTableProps) => {
   const [rowSelected, setRowSelected] = useState<GridRowId[]>([])
-  const { showSnackBar } = useSnackBar()
+  // const { showSnackBar } = useSnackBar()
 
   const handleDownload = async () => {
     for (const id of rowSelected) {

@@ -19,9 +19,7 @@ function formatUrl(filters: IFormattedFilters) {
 }
 
 export async function getMovies({ pageParam, filters }: { pageParam: number; filters: IFilters }): Promise<IMovie[]> {
-  console.log('Filters unparsed = ', filters)
   const formattedFilter = filterFormatter.parse(filters)
-  console.log('Filters parsed = ', formattedFilter)
   const url = formatUrl(formattedFilter)
   const { data } = await axios.get(`${url}pageSize=100&pageIndex=${pageParam}`)
   const { movies } = data

@@ -18,7 +18,6 @@ import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { Dispatch, FormEvent, SetStateAction, memo, useEffect, useRef, useState } from 'react'
 import { defaultFilters, staleTime } from '../../constants.js'
-import { useSnackBar } from '../../contexts/SnackbarContext.js'
 import { getMovie, getTMDB, updateMovie } from '../../services/movies.js'
 import { IFilterOption, IFilters, isFilterOption, isFilterOptions } from '../../types.js'
 import { convertToHours, formatPosterSC } from '../../utils.js'
@@ -79,7 +78,7 @@ function getActorImage(url: string) {
 export const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, setFilters }: IDetailProps) => {
   const [tmdbSearch, setTMDBSearch] = useState<string>('')
   const loadingRef = useRef<HTMLDivElement>(null)
-  const { showSnackBar } = useSnackBar()
+  // const { showSnackBar } = useSnackBar()
 
   const { data: movie, refetch: refreshMovie } = useQuery({
     initialData: initMovie,
