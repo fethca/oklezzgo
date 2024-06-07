@@ -1,0 +1,63 @@
+{
+  "name": "oklezzgo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "serve": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "lint": "eslint \"{src,tests}/**/*.{ts,tsx}\"",
+    "format": "prettier -w \"{src,tests}/**/*.{ts,tsx}\"",
+    "version:patch": "fethca-version patch",
+    "version:minor": "fethca-version minor",
+    "version:major": "fethca-version major"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fethcat/embla-carousel-react": "^8.0.7",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/material": "^5.15.19",
+    "@mui/x-data-grid": "^7.6.2",
+    "@tanstack/react-query": "^5.40.1",
+    "@tanstack/react-virtual": "^3.5.1",
+    "@tauri-apps/api": "^1.5.6",
+    "axios": "^1.7.2",
+    "dayjs": "^1.11.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-intersection-observer": "^9.10.3",
+    "react-router-dom": "^6.23.1",
+    "vite": "^5.2.13",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@fethcat/embla-carousel": "^8.0.7",
+    "@fethcat/eslint-plugin": "^0.0.3",
+    "@fethcat/prettier-config": "^1.0.5",
+    "@fethcat/shared": "^0.0.13",
+    "@fethcat/version": "^0.0.12",
+    "@tauri-apps/cli": "^1.5.14",
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.0.0",
+    "vite-tsconfig-paths": "^4.3.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@fethcat/front"
+    ],
+    "rules": {
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off"
+    }
+  },
+  "prettier": "@fethcat/prettier-config"
+}
