@@ -1,7 +1,8 @@
 {
-  "compilerOptions": {    
+  "compilerOptions": {
     "outDir": "dist",
     "module": "nodenext",
+    "target": "ESNext",
     "strict": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx",

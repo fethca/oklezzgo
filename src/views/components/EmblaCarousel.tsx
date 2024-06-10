@@ -1,5 +1,5 @@
-import { EmblaOptionsType } from '@fethcat/embla-carousel'
-import useEmblaCarousel from '@fethcat/embla-carousel-react'
+import { EmblaOptionsType } from 'embla-carousel'
+import useEmblaCarousel from 'embla-carousel-react'
 import { ComponentType } from 'react'
 
 type EmblaSlide = Record<string, unknown>
@@ -11,7 +11,6 @@ type EmblaProps<T extends EmblaSlide> = {
 
 export const EmblaCarousel = <T extends EmblaSlide>({ slides, Slide, options }: EmblaProps<T>): JSX.Element => {
   const [emblaRef] = useEmblaCarousel(options)
-  console.log('In embla', slides)
   return (
     <div className="embla">
       <div className="embla__viewport" ref={emblaRef}>
