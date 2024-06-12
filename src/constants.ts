@@ -92,6 +92,5 @@ export const dummyMovie: Omit<IMovie, 'opsDatas'> = {
   popularity: 12,
 }
 
-// export const apiUrl: string = 'http://localhost:3002/api'
-export const radarrUrl: string = 'https://radarr.fethca-dev.site/api/v3'
-export const apiUrl: string = 'https://oklezzgo.jeremy-grijol.com/api'
+export const radarrUrl: string = import.meta.env.VITE_RADARR_URL || ''
+export const apiUrl: string = import.meta.env.VITE_API_URL || ''
