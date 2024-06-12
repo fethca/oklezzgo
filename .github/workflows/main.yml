@@ -47,7 +47,15 @@ jobs:
           key: ${{ secrets.VPS_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            if [ "$(docker ps -q --filter "name=oklezzgo")" ]; then docker stop oklezzgo && docker rm oklezzgo; fi
+            for container in $(docker ps -q --filter "name=oklezzgo-"); do
+              docker stop $container
+              docker rm $container
+            done
             if [ "$(docker images -q 'fethca/oklezzgo')" ]; then docker rmi fethca/oklezzgo; fi
             cd ~/traefik
-            docker-compose up -d --remove-orphans oklezzgo
+            services=$(docker-compose config --services)
+            for service in $services; do
+              if [[ $service == oklezzgo-* ]]; then
+                docker-compose up -d $service
+              fi
+            done
