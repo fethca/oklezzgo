@@ -47,21 +47,26 @@ jobs:
           key: ${{ secrets.VPS_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            # Stopping existing containers
-            echo "step: stopping existing containers"
+            # Stopping running containers
+            echo "step: stopping running containers"
             for container in $(docker ps -q --filter "name=oklezzgo-"); do
+              echo "step: stopping container"
               docker stop $container
             done
+            echo "step: stopped running containers"
 
             # Removing existing containers
             echo "step: removing existing containers"
-            for container in $(docker ps -q --filter "name=oklezzgo-"); do
+            for container in $(docker ps -a -q --filter "name=oklezzgo-"); do
+              echo "step: removing container"
               docker rm $container
             done
+            echo "step: removed existing containers"
 
             # Removing latest image
             echo "step: removing latest image"
             if [ "$(docker images -q 'fethca/oklezzgo')" ]; then docker rmi fethca/oklezzgo; fi
+            echo "step: removed latest image"
 
             cd ~/traefik
             services=$(docker-compose config --services)
@@ -70,6 +75,8 @@ jobs:
             echo "step: starting the services"
             for service in $services; do
               if [[ $service == oklezzgo-* ]]; then
+                echo "step: starting service"
                 docker-compose up -d $service
               fi
             done
+            echo "step: started the services"
