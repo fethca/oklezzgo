@@ -15,6 +15,8 @@ function injectPackageVersion() {
       return {
         define: {
           __APP_VERSION__: JSON.stringify(version),
+          VITE_API_URL: '__VITE_API_URL__', //placeholders replaced at runtime
+          VITE_RADARR_URL: '__VITE_RADARR_URL__',
         },
       }
     },
