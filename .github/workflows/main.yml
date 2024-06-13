@@ -49,6 +49,8 @@ jobs:
           script: |
             for container in $(docker ps -q --filter "name=oklezzgo-"); do
               docker stop $container
+            done
+            for container in $(docker ps -q --filter "name=oklezzgo-"); do
               docker rm $container
             done
             if [ "$(docker images -q 'fethca/oklezzgo')" ]; then docker rmi fethca/oklezzgo; fi
