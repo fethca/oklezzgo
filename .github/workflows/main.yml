@@ -73,7 +73,7 @@ jobs:
 
             # Starting the services
             echo "step: starting the services"
-            for service in $services; do
+            echo "$services" | while read -r service; do
               if [[ $service == oklezzgo-* ]]; then
                 echo "step: starting service"
                 docker-compose up -d $service
