@@ -92,5 +92,5 @@ export const dummyMovie: Omit<IMovie, 'opsDatas'> = {
   popularity: 12,
 }
 
-export const radarrUrl: string = import.meta.env.VITE_RADARR_URL || ''
-export const apiUrl: string = import.meta.env.VITE_API_URL || ''
+export const radarrUrl: string = import.meta.env.VITE_RADARR_URL
+export const apiUrl: string = import.meta.env.VITE_API_URL

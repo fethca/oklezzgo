@@ -51,7 +51,12 @@ FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 
 COPY --from=build /usr/app/dist ./
+COPY injectVarEnv.sh /usr/share/nginx/injectVarEnv.sh
+RUN chmod +x /usr/share/nginx/injectVarEnv.sh
 
 EXPOSE 4001
 
-CMD ["nginx", "-g", "daemon off;"] 
+# Replace placeholders with environment variables at runtime
+RUN apk add --no-cache bash
+
+CMD ["/usr/share/nginx/injectVarEnv.sh", "nginx", "-g", "daemon off;"] 
