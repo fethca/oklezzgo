@@ -24,13 +24,6 @@ function injectPackageVersion() {
 export default defineConfig(async () => ({
   plugins: [react(), tsconfigPaths(), injectPackageVersion()],
 
-  define: {
-    'process.env': {
-      VITE_API_URL: '__VITE_API_URL__', //placeholders replaced at runtime
-      VITE_RADARR_URL: '__VITE_RADARR_URL__',
-    },
-  },
-
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent vite from obscuring rust errors
