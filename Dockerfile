@@ -51,12 +51,12 @@ FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 
 COPY --from=build /usr/app/dist ./
-COPY injectVarEnv.sh /usr/share/nginx/injectVarEnv.sh
-RUN chmod +x /usr/share/nginx/injectVarEnv.sh
+COPY entrypoint.sh /usr/share/nginx/entrypoint.sh
+RUN chmod +x /usr/share/nginx/entrypoint.sh
 
 EXPOSE 4001
 
 # Replace placeholders with environment variables at runtime
 RUN apk add --no-cache bash
 
-CMD ["/usr/share/nginx/injectVarEnv.sh", "nginx", "-g", "daemon off;"] 
+ENTRYPOINT [ "/usr/share/nginx/entrypoint.sh" ]
