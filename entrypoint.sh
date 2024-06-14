@@ -11,3 +11,7 @@ for file in $(find /usr/share/nginx/html/assets -name '*.js'); do
 done
 
 echo "Finished running injectVarEnv.sh script"
+
+echo "Starting nginx"
+
+nginx -g 'daemon off;'
