@@ -9,8 +9,8 @@ type ICardWideProps = {
 
 const CardWide = memo(({ cover, name, onClick }: ICardWideProps): JSX.Element => {
   return (
-    <Card sx={{ width: 350, height: '100%' }}>
-      <CardActionArea sx={{ height: '100%' }} onClick={onClick}>
+    <Card className="card-wide">
+      <CardActionArea className="card-wide-content" sx={{ height: '100%' }} onClick={onClick}>
         <CardMedia component="img" height="140" image={cover || 'assets/posterholder.png'} alt={name} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">

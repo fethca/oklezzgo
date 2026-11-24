@@ -1,11 +1,13 @@
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
-import { SessionProvider } from './contexts/SessionContext.js'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
+import { SessionProvider, useSession } from './contexts/SessionContext.js'
 import { SnackBarProvider } from './contexts/SnackbarContext.js'
 import './style/main.css'
 import { Footer } from './views/components/Footer.js'
 import { NavBar } from './views/components/NavBar.js'
 import { Catalog } from './views/pages/Catalog.js'
 import { Login } from './views/pages/Login.js'
+import { Signup } from './views/pages/Signup.js'
+import { User } from './views/pages/User.js'
 
 export function App() {
   return (
@@ -13,9 +15,11 @@ export function App() {
       <SnackBarProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route element={<PrivateRoute />}>
+            <Route element={<Layout />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<Catalog />} />
+              <Route path="/user/:id" element={<User />} />
             </Route>
           </Routes>
         </BrowserRouter>
@@ -24,10 +28,7 @@ export function App() {
   )
 }
 
-function PrivateRoute() {
-  // const session = useContext(SessionContext)
-  // if (!session) return <Navigate to="/login" />
-  // if (!session.brands.length) return <AuthError />
+function Layout() {
   return (
     <>
       <NavBar />
@@ -35,4 +36,11 @@ function PrivateRoute() {
       <Footer />
     </>
   )
+}
+
+function PrivateRoute() {
+  const session = useSession()
+
+  if (!session) return <Navigate to="/login" />
+  return <Outlet />
 }
