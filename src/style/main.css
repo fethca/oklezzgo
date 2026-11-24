@@ -360,6 +360,17 @@ svg .cls-4 {
   padding-top: 10px;
 }
 
+.card-wide {
+  width: 350px;
+  height: 100%;
+}
+
+.card-wide-content {
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+}
+
 .footer {
   display: flex;
   width: 100%;

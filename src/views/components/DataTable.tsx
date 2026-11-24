@@ -29,7 +29,7 @@ const columns: GridColDef[] = [
   { field: 'name', headerName: 'Titre', minWidth: 200, flex: 1 },
   { field: 'publish_date', headerName: 'Age', minWidth: 100, valueFormatter: ageFormatter },
   { field: 'completed', headerName: 'Vues', minWidth: 100 },
-  { field: 'seed', headerName: 'Peers', minWidth: 100 },
+  { field: 'seed', headerName: 'Partages', minWidth: 100 },
   { field: 'size', headerName: 'Taille', minWidth: 100 },
   { field: 'score', headerName: 'Score', minWidth: 100, editable: true },
 ]

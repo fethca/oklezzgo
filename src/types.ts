@@ -1,3 +1,4 @@
+import { IUser } from '@fethcat/shared/types'
 import { z } from 'zod'
 
 export const optionSchema = z.object({ id: z.number(), name: z.string() })
@@ -41,3 +42,5 @@ export const filterFormatter = filterSchema.merge(
 )
 
 export type IFormattedFilters = z.infer<typeof filterFormatter>
+
+export type IAuth = { user: IUser | null; accessToken: string; refreshToken: string }
