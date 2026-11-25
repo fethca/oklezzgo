@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.12",
   "type": "module",
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "serve": "vite",
     "build": "tsc -p tsconfig.build.json && vite build",
@@ -37,7 +38,7 @@
     "@fethcat/eslint-plugin": "^0.0.3",
     "@fethcat/prettier-config": "^1.0.5",
     "@fethcat/shared": "^0.0.15",
-    "@fethcat/version": "^0.0.12",
+    "@fethcat/version": "^0.0.16",
     "@tauri-apps/cli": "^1.5.14",
     "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
