@@ -32,7 +32,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 FROM source AS build
 
 COPY tsconfig.json ./
-COPY tsconfig.build.json ./
 COPY public ./public
 COPY index.html ./
 COPY vite.config.ts ./
