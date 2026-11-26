@@ -1,6 +1,6 @@
 import { Button, Container } from '@mui/material'
 import { memo, useContext } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router'
 import { SessionContext } from '../../contexts/SessionContext.js'
 import { Logo } from '../components/Logo.js'
 
