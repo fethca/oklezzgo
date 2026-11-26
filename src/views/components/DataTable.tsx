@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { IMovie } from '@fethcat/shared/types'
-import { DataGrid, GridColDef, GridRowId, GridRowSelectionModel } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid'
 import { memo, useState } from 'react'
 import { DataTableFooter } from './DataTableFooter.js'
 
@@ -42,7 +42,7 @@ type IDataTableProps = {
 }
 
 const DataTable = memo(({ rows, pageSize }: IDataTableProps) => {
-  const [rowSelected, setRowSelected] = useState<GridRowId[]>([])
+  const [rowSelected, setRowSelected] = useState<GridRowSelectionModel>([])
   // const { showSnackBar } = useSnackBar()
 
   const handleDownload = async () => {
