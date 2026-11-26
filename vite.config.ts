@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 function injectPackageVersion() {
   return {
@@ -22,7 +21,7 @@ function injectPackageVersion() {
 }
 
 export default defineConfig(async () => ({
-  plugins: [react(), tsconfigPaths(), injectPackageVersion()],
+  plugins: [react(), injectPackageVersion()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
