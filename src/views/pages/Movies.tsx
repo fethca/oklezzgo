@@ -58,7 +58,7 @@ const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }:
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      fetchNextPage()
+      void fetchNextPage()
     }
   }, [inView, hasNextPage, fetchNextPage])
 
@@ -100,7 +100,7 @@ const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }:
 
   const onRandom = () => {
     setDetailLoading(true)
-    randomizeMovie()
+    void randomizeMovie()
     setDetailOpen(true)
   }
 

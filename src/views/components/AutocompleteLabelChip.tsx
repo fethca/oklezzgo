@@ -24,7 +24,10 @@ const AutoCompleteLabelChip = memo(({ label, options, value, onChange, onInputCh
         value={value || []}
         renderInput={(params) => <TextField {...params} variant="standard" label={label} />}
         renderTags={(value, props) => {
-          return value.map((option, index) => <Chip {...props({ index })} key={option.id} label={option.name} />)
+          return value.map((option, index) => {
+            const { key, ...tagProps } = props({ index })
+            return <Chip key={key} {...tagProps} label={option.name} />
+          })
         }}
         onInputChange={onInputChange}
         onChange={onChange}

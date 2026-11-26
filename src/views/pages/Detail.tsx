@@ -116,7 +116,7 @@ const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, 
   const handleFavorite = async (tmdb: ITmdb) => {
     const body = { ...movie, tmdb: { ...tmdb, searchQuery: tmdb.tmdbId } }
     await updateMovie(movie.id, body)
-    refreshMovie()
+    void refreshMovie()
     refreshList()
   }
 
