@@ -1,6 +1,6 @@
 # oklezzgo
 
-Movie library based on [Senscritique](https://www.senscritique.com/search?page=1) and TMDB. It allows to filter movies based on different criteria such as rating, genre, country etc. A web version is available [here](https://oklezzgo.jeremy-grijol.com/). The project is also compatible with [Tauri](https://tauri.app/), the executables will be released soon.
+Movie library based on [Senscritique](https://www.senscritique.com/search?page=1) and TMDB. It allows to filter movies based on different criteria such as rating, genre, country etc. A web version is available [here](https://oklezzgo.jeremy-grijol.com/).
 
 ## Prerequisites
 
@@ -9,7 +9,6 @@ Before installing oklezzgo, ensure you have the following prerequisites met:
 - Node.js installed on your system
 - pnpm package manager installed
 - A [movie-api](https://github.com/fethca/movie-api)
-- Tauri configurations such as rust, see [here](https://tauri.app/v1/guides/getting-started/prerequisites)
 
 ### Installation
 
