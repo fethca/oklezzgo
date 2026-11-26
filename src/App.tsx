@@ -1,4 +1,4 @@
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router'
 import { SessionProvider } from './contexts/SessionContext.js'
 import { SnackBarProvider } from './contexts/SnackbarContext.js'
 import './style/main.css'
