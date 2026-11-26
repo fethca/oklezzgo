@@ -128,7 +128,7 @@ export async function updateMovie(id: number, data: Omit<IMovie, 'opsDatas'>): P
   try {
     const { status } = await axios.put<Response>(url, { movie: data })
     return status === 200
-  } catch (error) {
+  } catch {
     return false
   }
 }
