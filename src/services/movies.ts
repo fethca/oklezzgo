@@ -41,6 +41,12 @@ export async function getMovie({ id }: { id: number }): Promise<IMovie> {
   return movie
 }
 
+export async function getVersions({ id }: { id: number }): Promise<IMovie[]> {
+  const { data } = await axios.get(`${apiUrl}/movies/${id}/versions`)
+  const { versions } = data
+  return versions
+}
+
 export async function getTMDB(search: string): Promise<ITmdb[]> {
   if (!search) return []
   const url = `${apiUrl}/tmdb?search=${search}`

@@ -156,6 +156,7 @@ const Movies = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }:
         open={detailOpen}
         loading={detailLoading}
         refreshList={refreshList}
+        openMovie={setDetailMovie}
         setOpen={setDetailOpen}
         filters={filters}
         setFilters={setFilters}

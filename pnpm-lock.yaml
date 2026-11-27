@@ -61,8 +61,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.5
       '@fethcat/shared':
-        specifier: ^0.0.18
-        version: 0.0.18
+        specifier: ^0.0.20
+        version: 0.0.20
       '@fethcat/version':
         specifier: ^0.0.17
         version: 0.0.17
@@ -357,8 +357,8 @@ packages:
   '@fethcat/prettier-config@1.0.5':
     resolution: {integrity: sha512-CshSPFuocowU50z6Q21ONpf236sFGx+FyyScBR3b4ocBRrSnZTdNnpUXpyVuYvt2IJd2nREqv1Y7PZ47qcjkPg==}
 
-  '@fethcat/shared@0.0.18':
-    resolution: {integrity: sha512-lTSp2ovQEu/tOWac8c1QIu4R5fWp8PIrHudpzEQRWxwzSjPCmfbXgsV0UEH0Ehth18dH9g6gMTLn4nhm+env7Q==}
+  '@fethcat/shared@0.0.20':
+    resolution: {integrity: sha512-dKreGwcQKlrylSyDCgbKM2ubySzpg2bU8pwWj3q1Z+Fm9zc1dH0bSfmw+0XBVGwpu7h45iwFDrz2E7KfFi0SkA==}
     engines: {node: '>=24'}
 
   '@fethcat/version@0.0.17':
@@ -2337,7 +2337,7 @@ snapshots:
 
   '@fethcat/prettier-config@1.0.5': {}
 
-  '@fethcat/shared@0.0.18':
+  '@fethcat/shared@0.0.20':
     dependencies:
       fuse.js: 7.5.0
       lodash.get: 4.4.2

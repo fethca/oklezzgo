@@ -91,6 +91,7 @@ export const dummyMovie: Omit<IMovie, 'opsDatas'> = {
   search: '',
   updatedAt: new Date('2024-04-05T16:33:28.186Z'),
   released: true,
+  edition: false,
   popularity: 12,
 }
 
