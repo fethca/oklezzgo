@@ -22,6 +22,7 @@ export const defaultCategories = [
 ]
 export const defaultImage = 'tmdb'
 export const defaultReleased = true
+export const defaultUnfound = false
 
 export const staleTime = 1000 * 60 * 60
 
@@ -40,6 +41,7 @@ export const defaultFilters: IFilters = {
   released: defaultReleased,
   sortOrder: defaultSortOrder,
   sortValue: defaultSortValue,
+  unfound: defaultUnfound,
 }
 
 export const dummyMovie: Omit<IMovie, 'opsDatas'> = {
