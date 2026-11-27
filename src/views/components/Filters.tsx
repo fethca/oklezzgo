@@ -174,6 +174,11 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
     setFilters(newFilters)
   }
 
+  const toggleUnfound = (event: ChangeEvent<HTMLInputElement>) => {
+    const unfound = event.target.checked
+    setFilters({ ...filters, unfound, released: unfound ? false : filters.released })
+  }
+
   const handleMovieSearch = (_event: SyntheticEvent, value: string) => {
     setMovieSearch(value)
   }
@@ -314,6 +319,10 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
             <FormControlLabel
               control={<Switch id="switch-released" checked={filters.released} onChange={toggleReleased} />}
               label="Dispo"
+            />
+            <FormControlLabel
+              control={<Switch id="switch-unfound" checked={filters.unfound} onChange={toggleUnfound} />}
+              label="Introuvables"
             />
           </FormGroup>
           <AutoCompleteLabelChip

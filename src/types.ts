@@ -28,6 +28,7 @@ export const filterSchema = z.object({
   released: z.boolean(),
   sortOrder: z.string(),
   sortValue: z.string(),
+  unfound: z.boolean(),
 })
 
 export type IFilters = z.infer<typeof filterSchema>

@@ -126,7 +126,7 @@ const Detail = memo(({ open, loading, initMovie, refreshList, setOpen, filters, 
   }
 
   useEffect(() => {
-    if (!loading && open && movie.tmdb) setTMDBSearch(movie.tmdb.title)
+    if (!loading && open) setTMDBSearch(movie.tmdb?.title || movie.senscritique.title)
   }, [movie, loading, open])
 
   if (loading) {
