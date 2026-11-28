@@ -18,6 +18,7 @@ import {
   getCountries,
   getDirectors,
   getGenres,
+  getLanguages,
   getMovieList,
   getPolls,
   searchActors,
@@ -145,6 +146,12 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
   const categories = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories(),
+    staleTime,
+  })
+
+  const languages = useQuery({
+    queryKey: ['languages'],
+    queryFn: () => getLanguages(),
     staleTime,
   })
 
@@ -283,6 +290,14 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
             setFilters={setFilters}
             label="Pays"
             values={filters.countries}
+          ></MultiSelectLabelsChip>
+          <MultiSelectLabelsChip
+            name="languages"
+            filters={filters}
+            data={languages.data?.map((language, index) => ({ label: language, id: index })) || []}
+            setFilters={setFilters}
+            label="Langues"
+            values={filters.languages}
           ></MultiSelectLabelsChip>
           <div className="source-filter">
             <SourceToggle value={filters.genresSource} onChange={changeGenresSource} />

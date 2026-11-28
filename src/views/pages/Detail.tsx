@@ -102,7 +102,7 @@ const Detail = memo(
     })
 
     const selectOption = (
-      property: 'directors' | 'actors' | 'polls' | 'genres' | 'countries',
+      property: 'directors' | 'actors' | 'polls' | 'genres' | 'countries' | 'languages',
       value: IFilterOption | string,
     ) => {
       const newSelection = [...filters[property]]
@@ -146,6 +146,8 @@ const Detail = memo(
         </Dialog>
       )
     }
+
+    const language = movie.tmdb?.originalLanguage.name
 
     return (
       <Dialog fullWidth={true} maxWidth={'lg'} className="dialog" open={open} onClose={handleClose} scroll="paper">
@@ -194,6 +196,12 @@ const Detail = memo(
                     ></Chip>
                   ))}
                 </div>
+                {language && (
+                  <div>
+                    <h4>Langue</h4>
+                    <Chip className="chip" label={language} onClick={() => selectOption('languages', language)}></Chip>
+                  </div>
+                )}
                 {versions && versions.length > 0 && (
                   <div>
                     <h4>Versions</h4>
