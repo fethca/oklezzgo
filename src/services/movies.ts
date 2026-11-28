@@ -1,7 +1,7 @@
 import { IMovie, ITmdb } from '@fethcat/shared/types'
 import axios from 'axios'
 import { apiUrl, defaultFilters } from '../constants.js'
-import { IFilterOption, IFilters, IFormattedFilters, filterFormatter } from '../types.js'
+import { IFilterOption, IFilters, IFormattedFilters, ISource, filterFormatter } from '../types.js'
 
 const comparisonKeys = ['rating', 'dateRelease', 'duration', 'popularity', 'seed']
 type IFormattedEntries = [keyof IFormattedFilters, IFormattedFilters[keyof IFormattedFilters]][]
@@ -90,7 +90,7 @@ export async function getCountries(): Promise<string[]> {
   return countries
 }
 
-export async function getGenres({ source }: { source: 'senscritique' | 'tmdb' }): Promise<string[]> {
+export async function getGenres({ source }: { source: ISource }): Promise<string[]> {
   const url = `${apiUrl}/genres?source=${source}`
   const { data } = await axios.get(url)
   const { genres } = data

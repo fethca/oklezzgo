@@ -8,10 +8,22 @@ import {
   FormControlLabel,
   FormGroup,
   Switch,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, memo, useCallback, useEffect, useState } from 'react'
-import { currentYear, defaultFilters, staleTime } from '../../constants.js'
+import {
+  ChangeEvent,
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  SyntheticEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
+import { currentYear, defaultFilters, sortItems, staleTime } from '../../constants.js'
 import {
   getActors,
   getCategories,
@@ -24,7 +36,7 @@ import {
   searchDirectors,
   searchPolls,
 } from '../../services/movies.js'
-import { IFilterOption, IFilters, isFilterOptions } from '../../types.js'
+import { IFilterOption, IFilters, ISource, isFilterOptions } from '../../types.js'
 import { convertToHours, formatOptions } from '../../utils.js'
 import { AutoCompleteLabelChip } from './AutocompleteLabelChip.js'
 import { BasicSelect } from './BasicSelect.js'
@@ -154,8 +166,8 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
   })
 
   const genres = useQuery({
-    queryKey: ['genres'],
-    queryFn: () => getGenres({ source: 'senscritique' }),
+    queryKey: ['genres', filters.source],
+    queryFn: () => getGenres({ source: filters.source }),
     staleTime,
   })
 
@@ -168,6 +180,13 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
   const handleReset = useCallback(() => {
     setFilters(defaultFilters)
   }, [setFilters])
+
+  const changeSource = (_event: MouseEvent<HTMLElement>, source: ISource | null) => {
+    if (!source) return
+    const sortIndex = sortItems[filters.source].findIndex(({ value }) => value === filters.sortValue)
+    const sortValue = sortItems[source][sortIndex]?.value ?? filters.sortValue
+    setFilters({ ...filters, source, genres: [], sortValue })
+  }
 
   const toggleReleased = (event: ChangeEvent<HTMLInputElement>) => {
     const newFilters = { ...filters, released: event.target.checked }
@@ -212,6 +231,17 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
       </AccordionSummary>
       <AccordionDetails className="accordion">
         <div className="filters">
+          <ToggleButtonGroup
+            className="filter"
+            color="primary"
+            exclusive
+            value={filters.source}
+            onChange={changeSource}
+            aria-label="Source"
+          >
+            <ToggleButton value="senscritique">SC</ToggleButton>
+            <ToggleButton value="tmdb">TMDB</ToggleButton>
+          </ToggleButtonGroup>
           <RangeSlider
             label="Note"
             name="rating"
@@ -282,13 +312,7 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
             label="Tri"
             name="sortValue"
             value={filters.sortValue}
-            items={[
-              { label: 'Note', value: 'senscritique.rating' },
-              { label: 'Année', value: 'senscritique.dateRelease' },
-              { label: 'Durée', value: 'senscritique.duration' },
-              { label: 'Popularité Senscritique', value: 'popularity' },
-              { label: 'Popularité TMDB', value: 'tmdb.popularity' },
-            ]}
+            items={sortItems[filters.source]}
             filters={filters}
             setFilters={setFilters}
           ></BasicSelect>

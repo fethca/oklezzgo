@@ -13,6 +13,9 @@ export const isFilterOptions = (value: unknown): value is IFilterOption[] => {
   return success
 }
 
+export const sourceSchema = z.enum(['senscritique', 'tmdb'])
+export type ISource = z.infer<typeof sourceSchema>
+
 export const filterSchema = z.object({
   categories: z.array(z.string()),
   countries: z.array(z.string()),
@@ -28,6 +31,7 @@ export const filterSchema = z.object({
   released: z.boolean(),
   sortOrder: z.string(),
   sortValue: z.string(),
+  source: sourceSchema,
   unfound: z.boolean(),
 })
 
