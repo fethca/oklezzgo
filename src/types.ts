@@ -25,6 +25,7 @@ export const filterSchema = z.object({
   polls: z.array(optionSchema),
   duration: z.array(z.number()),
   genres: z.array(z.string()),
+  languages: z.array(z.string()),
   genresSource: sourceSchema,
   image: z.string(),
   popularity: z.array(z.number()),

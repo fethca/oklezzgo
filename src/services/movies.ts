@@ -90,6 +90,13 @@ export async function getCountries(): Promise<string[]> {
   return countries
 }
 
+export async function getLanguages(): Promise<string[]> {
+  const url = `${apiUrl}/languages`
+  const { data } = await axios.get(url)
+  const { languages } = data
+  return languages
+}
+
 export async function getGenres({ source }: { source: ISource }): Promise<string[]> {
   const url = `${apiUrl}/genres?source=${source}`
   const { data } = await axios.get(url)

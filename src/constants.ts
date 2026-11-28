@@ -10,6 +10,7 @@ export const defaultDirectors = []
 export const defaultActors = []
 export const defaultPolls = []
 export const defaultCountries = []
+export const defaultLanguages = []
 export const defaultSortValue = 'tmdb.popularity'
 export const defaultSortOrder = ''
 export const defaultGenres = []
@@ -35,6 +36,7 @@ export const staleTime = 1000 * 60 * 60
 export const defaultFilters: IFilters = {
   categories: defaultCategories,
   countries: defaultCountries,
+  languages: defaultLanguages,
   dateRelease: defaultDateRelease,
   directors: defaultDirectors,
   actors: defaultActors,

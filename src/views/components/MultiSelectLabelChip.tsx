@@ -17,7 +17,7 @@ const MenuProps = {
 
 type IMultiSelectProps = {
   label: string
-  name: 'categories' | 'countries' | 'genres'
+  name: 'categories' | 'countries' | 'genres' | 'languages'
   data: { label: string; id: number }[]
   filters: IFilters
   setFilters: Dispatch<React.SetStateAction<IFilters>>
