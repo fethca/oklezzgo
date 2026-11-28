@@ -13,6 +13,9 @@ export const isFilterOptions = (value: unknown): value is IFilterOption[] => {
   return success
 }
 
+export const sourceSchema = z.enum(['senscritique', 'tmdb'])
+export type ISource = z.infer<typeof sourceSchema>
+
 export const filterSchema = z.object({
   categories: z.array(z.string()),
   countries: z.array(z.string()),
@@ -22,9 +25,11 @@ export const filterSchema = z.object({
   polls: z.array(optionSchema),
   duration: z.array(z.number()),
   genres: z.array(z.string()),
+  genresSource: sourceSchema,
   image: z.string(),
   popularity: z.array(z.number()),
   rating: z.array(z.number()),
+  ratingSource: sourceSchema,
   released: z.boolean(),
   sortOrder: z.string(),
   sortValue: z.string(),

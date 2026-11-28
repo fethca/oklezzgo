@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, memo, useCallback, useEffect, useState } from 'react'
-import { currentYear, defaultFilters, staleTime } from '../../constants.js'
+import { currentYear, defaultFilters, ratingFields, staleTime } from '../../constants.js'
 import {
   getActors,
   getCategories,
@@ -24,12 +24,13 @@ import {
   searchDirectors,
   searchPolls,
 } from '../../services/movies.js'
-import { IFilterOption, IFilters, isFilterOptions } from '../../types.js'
+import { IFilterOption, IFilters, ISource, isFilterOptions } from '../../types.js'
 import { convertToHours, formatOptions } from '../../utils.js'
 import { AutoCompleteLabelChip } from './AutocompleteLabelChip.js'
 import { BasicSelect } from './BasicSelect.js'
 import { MultiSelectLabelsChip } from './MultiSelectLabelChip.js'
 import { RangeSlider } from './RangeSlider.js'
+import { SourceToggle } from './SourceToggle.js'
 
 type IFiltersProps = {
   filters: IFilters
@@ -154,8 +155,8 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
   })
 
   const genres = useQuery({
-    queryKey: ['genres'],
-    queryFn: () => getGenres({ source: 'senscritique' }),
+    queryKey: ['genres', filters.genresSource],
+    queryFn: () => getGenres({ source: filters.genresSource }),
     staleTime,
   })
 
@@ -168,6 +169,16 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
   const handleReset = useCallback(() => {
     setFilters(defaultFilters)
   }, [setFilters])
+
+  const changeRatingSource = (ratingSource: ISource) => {
+    const isRatingSort = filters.sortValue === ratingFields[filters.ratingSource]
+    const sortValue = isRatingSort ? ratingFields[ratingSource] : filters.sortValue
+    setFilters({ ...filters, ratingSource, sortValue })
+  }
+
+  const changeGenresSource = (genresSource: ISource) => {
+    setFilters({ ...filters, genresSource, genres: [] })
+  }
 
   const toggleReleased = (event: ChangeEvent<HTMLInputElement>) => {
     const newFilters = { ...filters, released: event.target.checked }
@@ -212,16 +223,19 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
       </AccordionSummary>
       <AccordionDetails className="accordion">
         <div className="filters">
-          <RangeSlider
-            label="Note"
-            name="rating"
-            min={0}
-            max={10}
-            step={0.1}
-            filters={filters}
-            setFilters={setFilters}
-            filterValues={filters.rating}
-          ></RangeSlider>
+          <div className="source-filter">
+            <SourceToggle value={filters.ratingSource} onChange={changeRatingSource} />
+            <RangeSlider
+              label="Note"
+              name="rating"
+              min={0}
+              max={10}
+              step={0.1}
+              filters={filters}
+              setFilters={setFilters}
+              filterValues={filters.rating}
+            ></RangeSlider>
+          </div>
           <RangeSlider
             label="Année"
             name="dateRelease"
@@ -270,20 +284,23 @@ const Filters = memo(({ filters, setFilters, moviesSelected, setMoviesSelected }
             label="Pays"
             values={filters.countries}
           ></MultiSelectLabelsChip>
-          <MultiSelectLabelsChip
-            name="genres"
-            filters={filters}
-            data={genres.data?.map((genre, index) => ({ label: genre, id: index })) || []}
-            setFilters={setFilters}
-            label="Genres"
-            values={filters.genres}
-          ></MultiSelectLabelsChip>
+          <div className="source-filter">
+            <SourceToggle value={filters.genresSource} onChange={changeGenresSource} />
+            <MultiSelectLabelsChip
+              name="genres"
+              filters={filters}
+              data={genres.data?.map((genre, index) => ({ label: genre, id: index })) || []}
+              setFilters={setFilters}
+              label="Genres"
+              values={filters.genres}
+            ></MultiSelectLabelsChip>
+          </div>
           <BasicSelect
             label="Tri"
             name="sortValue"
             value={filters.sortValue}
             items={[
-              { label: 'Note', value: 'senscritique.rating' },
+              { label: 'Note', value: ratingFields[filters.ratingSource] },
               { label: 'Année', value: 'senscritique.dateRelease' },
               { label: 'Durée', value: 'senscritique.duration' },
               { label: 'Popularité Senscritique', value: 'popularity' },

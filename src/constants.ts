@@ -1,5 +1,5 @@
 import { IMovie } from '@fethcat/shared/types'
-import { IFilters } from './types.js'
+import { IFilters, ISource } from './types.js'
 
 export const currentYear = new Date().getFullYear()
 export const defaultRating = [0, 10]
@@ -21,8 +21,14 @@ export const defaultCategories = [
   'Film VOD (vidéo à la demande)',
 ]
 export const defaultImage = 'tmdb'
+export const defaultSource: ISource = 'senscritique'
 export const defaultReleased = true
 export const defaultUnfound = false
+
+export const ratingFields: Record<ISource, string> = {
+  senscritique: 'senscritique.rating',
+  tmdb: 'tmdb.ratings.tmdb.value',
+}
 
 export const staleTime = 1000 * 60 * 60
 
@@ -35,9 +41,11 @@ export const defaultFilters: IFilters = {
   polls: defaultPolls,
   duration: defaultDuration,
   genres: defaultGenres,
+  genresSource: defaultSource,
   image: defaultImage,
   popularity: defaultPopularity,
   rating: defaultRating,
+  ratingSource: defaultSource,
   released: defaultReleased,
   sortOrder: defaultSortOrder,
   sortValue: defaultSortValue,
