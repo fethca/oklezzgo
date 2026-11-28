@@ -25,13 +25,14 @@ export const filterSchema = z.object({
   polls: z.array(optionSchema),
   duration: z.array(z.number()),
   genres: z.array(z.string()),
+  genresSource: sourceSchema,
   image: z.string(),
   popularity: z.array(z.number()),
   rating: z.array(z.number()),
+  ratingSource: sourceSchema,
   released: z.boolean(),
   sortOrder: z.string(),
   sortValue: z.string(),
-  source: sourceSchema,
   unfound: z.boolean(),
 })
 

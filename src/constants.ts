@@ -25,24 +25,9 @@ export const defaultSource: ISource = 'senscritique'
 export const defaultReleased = true
 export const defaultUnfound = false
 
-const popularitySortItems = [
-  { label: 'Popularité Senscritique', value: 'popularity' },
-  { label: 'Popularité TMDB', value: 'tmdb.popularity' },
-]
-
-export const sortItems: Record<ISource, { label: string; value: string }[]> = {
-  senscritique: [
-    { label: 'Note', value: 'senscritique.rating' },
-    { label: 'Année', value: 'senscritique.dateRelease' },
-    { label: 'Durée', value: 'senscritique.duration' },
-    ...popularitySortItems,
-  ],
-  tmdb: [
-    { label: 'Note', value: 'tmdb.ratings.tmdb.value' },
-    { label: 'Année', value: 'tmdb.year' },
-    { label: 'Durée', value: 'tmdb.runtime' },
-    ...popularitySortItems,
-  ],
+export const ratingFields: Record<ISource, string> = {
+  senscritique: 'senscritique.rating',
+  tmdb: 'tmdb.ratings.tmdb.value',
 }
 
 export const staleTime = 1000 * 60 * 60
@@ -56,13 +41,14 @@ export const defaultFilters: IFilters = {
   polls: defaultPolls,
   duration: defaultDuration,
   genres: defaultGenres,
+  genresSource: defaultSource,
   image: defaultImage,
   popularity: defaultPopularity,
   rating: defaultRating,
+  ratingSource: defaultSource,
   released: defaultReleased,
   sortOrder: defaultSortOrder,
   sortValue: defaultSortValue,
-  source: defaultSource,
   unfound: defaultUnfound,
 }
 
